@@ -12,200 +12,66 @@
 #undoWork{background:#dbeafe;color:#1e3a8a}
 #clearWork{background:#e2e8f0;color:#172033}
 
-/* Kladdytan går nu att skriva direkt i */
-.math-line[contenteditable="true"]{
- cursor:text;
- outline:none;
- padding:8px 6px;
- border-radius:7px;
- white-space:pre-wrap;
- font-size:20px;
-}
-.math-line[contenteditable="true"]:focus{background:#f8fbff}
-.math-line:empty:before{
- content:attr(data-placeholder);
- color:#94a3b8;
- font-size:15px;
- pointer-events:none;
-}
 
-/* Kompaktare bråkrutor i kladdytan så en hel divisionsuträkning ryms på en rad */
-#mathWork .math-frac{
+/* FIXAD KLADDYTA – en enda konsekvent layout */
+#mathWork{
+  min-height:170px;
+  border:2px solid #cbd5e1;
+  border-radius:12px;
+  padding:8px;
+  background:repeating-linear-gradient(#fff,#fff 47px,#e5e7eb 48px);
+  overflow-x:auto;
+}
+.math-line{
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:3px;
+  white-space:nowrap;
+}
+.math-line input.plain{
+  flex:0 0 44px;
+  width:44px;
+  height:32px;
+  padding:2px 4px;
+  border:1.5px solid #94a3b8;
+  border-radius:6px;
+  text-align:center;
+  font-size:16px;
+}
+.math-frac{
+  flex:0 0 42px;
+  width:42px;
   display:inline-flex;
   flex-direction:column;
-  vertical-align:middle;
-  width:42px;
-  min-width:42px;
-  margin:0 3px;
+  margin:0 1px;
 }
-#mathWork .math-frac input{
+.math-frac input{
+  box-sizing:border-box;
   width:42px;
-  min-width:0;
-  height:30px;
-  padding:2px 3px;
-  font-size:16px;
-  line-height:1;
+  height:25px;
+  padding:1px 3px;
   text-align:center;
-  border-radius:5px;
+  font-size:15px;
+  background:#fff;
+  border:2px solid #64748b;
 }
-#mathWork .math-frac input:first-child{
-  border-bottom-left-radius:0;
-  border-bottom-right-radius:0;
+.math-frac .mn{
+  border-radius:7px 7px 0 0;
+  border-bottom:2px solid #172033;
 }
-#mathWork .math-frac input:last-child{
-  border-top-left-radius:0;
-  border-top-right-radius:0;
+.math-frac .md{
+  border-radius:0 0 7px 7px;
+  border-top:0;
 }
-#mathWork .opToken{
-  display:inline-block;
-  margin:0 3px;
+.math-frac input::placeholder{font-size:10px;color:#94a3b8}
+.opToken{
+  flex:0 0 16px;
+  width:16px;
+  padding:0;
+  margin:0;
+  text-align:center;
   font-size:19px;
-  vertical-align:middle;
-}
-#mathWork .math-line{
-  flex-wrap:nowrap;
-  white-space:nowrap;
-  overflow-x:auto;
-  min-height:70px;
-}
-
-/* Extra kompakt kladdyta: minst 6 bråk + räknetecken ska rymmas på en rad */
-#mathWork .math-frac{
-  width:34px !important;
-  min-width:34px !important;
-  margin:0 1px !important;
-}
-#mathWork .math-frac input{
-  width:34px !important;
-  height:25px !important;
-  padding:1px 2px !important;
-  font-size:14px !important;
-  border-radius:4px !important;
-}
-#mathWork .opToken{
-  margin:0 2px !important;
-  padding:0 !important;
-  font-size:17px !important;
-  min-width:12px;
-  text-align:center;
-}
-#mathWork .math-line{
-  flex-wrap:nowrap !important;
-  white-space:nowrap !important;
-  gap:0 !important;
-  padding:5px 2px !important;
-  min-height:60px !important;
-  overflow-x:auto;
-}
-#mathWork{
-  padding-left:6px !important;
-  padding-right:6px !important;
-}
-
-/* Extra kompakt för kedjan: bråk bråk · tecken · bråk bråk · tecken · bråk · tecken · bråk */
-#mathWork{
-  padding:4px 2px !important;
-  width:100% !important;
-  overflow-x:hidden !important;
-}
-#mathWork .math-line{
-  width:100% !important;
-  min-width:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  white-space:nowrap !important;
-  gap:0 !important;
-  padding:3px 0 !important;
-  min-height:54px !important;
-  overflow:visible !important;
-}
-#mathWork .math-frac{
-  flex:0 0 27px !important;
-  width:27px !important;
-  min-width:27px !important;
-  max-width:27px !important;
-  margin:0 1px !important;
-}
-#mathWork .math-frac input{
-  box-sizing:border-box !important;
-  width:27px !important;
-  min-width:0 !important;
-  height:22px !important;
-  padding:0 1px !important;
-  font-size:12px !important;
-  line-height:20px !important;
-  border-width:1px !important;
-  border-radius:3px !important;
-}
-#mathWork .opToken{
-  flex:0 0 11px !important;
-  width:11px !important;
-  min-width:11px !important;
-  margin:0 1px !important;
-  padding:0 !important;
-  font-size:15px !important;
-  line-height:1 !important;
-  text-align:center !important;
-}
-
-/* Samma visuella stil som föregående version, men mindre mått.
-   Avsett för: bråk ÷ bråk = bråk × bråk = bråk */
-#mathWork{
-  padding:5px 3px !important;
-  width:100% !important;
-  overflow-x:hidden !important;
-}
-#mathWork .math-line{
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  white-space:nowrap !important;
-  width:100% !important;
-  gap:0 !important;
-  padding:4px 1px !important;
-  min-height:58px !important;
-  overflow:visible !important;
-}
-#mathWork .math-frac{
-  display:inline-flex !important;
-  flex-direction:column !important;
-  flex:0 0 38px !important;
-  width:38px !important;
-  min-width:38px !important;
-  max-width:38px !important;
-  margin:0 2px !important;
-}
-#mathWork .math-frac input{
-  box-sizing:border-box !important;
-  width:38px !important;
-  min-width:0 !important;
-  height:27px !important;
-  padding:1px 3px !important;
-  font-size:15px !important;
-  line-height:23px !important;
-  text-align:center !important;
-  border:2px solid #64748b !important;
-  background:#fff !important;
-}
-#mathWork .math-frac input:first-child{
-  border-radius:7px 7px 0 0 !important;
-  border-bottom:2px solid #1e293b !important;
-}
-#mathWork .math-frac input:last-child{
-  border-radius:0 0 7px 7px !important;
-  border-top:0 !important;
-}
-#mathWork .opToken{
-  display:inline-block !important;
-  flex:0 0 15px !important;
-  width:15px !important;
-  min-width:15px !important;
-  margin:0 2px !important;
-  padding:0 !important;
-  font-size:18px !important;
-  font-weight:700 !important;
-  line-height:1 !important;
-  text-align:center !important;
-  vertical-align:middle !important;
+  font-weight:700;
 }

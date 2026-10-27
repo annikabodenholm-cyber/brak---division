@@ -15,44 +15,32 @@ function build(){qs=[];for(let i=0;i<TOTAL;i++)qs.push(make())}
 function addLine(){
  let line=document.createElement("div");
  line.className="math-line";
- line.contentEditable="true";
- line.spellcheck=false;
- line.setAttribute("aria-label","Skriv din uträkning här");
- line.setAttribute("data-placeholder","Klicka här och skriv din uträkning");
- line.addEventListener("focus",()=>activeLine=line);
- line.addEventListener("click",()=>activeLine=line);
- line.addEventListener("keydown",e=>{
-   if(e.key==="Enter"){
-     e.preventDefault();
-     let nl=addLine();
-     nl.focus();
+ line.addEventListener("click",e=>{
+   activeLine=line;
+   if(e.target===line && !line.querySelector("input.plain")){
+     addPlainInput(line);
    }
  });
  E("mathWork").appendChild(line);
  activeLine=line;
  return line
 }
-function insert(type){
- if(!activeLine) addLine();
- if(type==="frac"){
-   const f=document.createElement("span");
-   f.className="math-frac";
-   const num=document.createElement("input");
-   const den=document.createElement("input");
-   num.className="mn"; den.className="md";
-   num.inputMode="numeric"; den.inputMode="numeric";
-   num.placeholder="täljare"; den.placeholder="nämnare";
-   num.setAttribute("aria-label","Täljare");
-   den.setAttribute("aria-label","Nämnare");
-   f.contentEditable="false"; f.appendChild(num); f.appendChild(den); activeLine.appendChild(f);
-   num.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="ArrowDown"){e.preventDefault();den.focus();}});
-   den.addEventListener("keydown",e=>{if(e.key==="ArrowUp"){e.preventDefault();num.focus();}});
-   num.focus();
- }else{
-   const t=document.createElement("span");t.className="opToken";t.textContent=type;activeLine.appendChild(t);
- }
+function addPlainInput(line=activeLine){
+ if(!line) line=addLine();
+ let inp=document.createElement("input");
+ inp.className="plain";
+ inp.type="text";
+ inp.inputMode="text";
+ inp.setAttribute("aria-label","Skriv i kladdytan");
+ inp.addEventListener("focus",()=>activeLine=line);
+ inp.addEventListener("keydown",e=>{
+   if(e.key==="Enter"){e.preventDefault();let nl=addLine();addPlainInput(nl)}
+ });
+ line.appendChild(inp);
+ inp.focus();
+ return inp
 }
-function resetWork(){E("mathWork").innerHTML="";addLine()}function undoWork(){
+function resetWork(){E("mathWork").innerHTML="";let line=addLine();addPlainInput(line)}function undoWork(){
  const lines=[...E("mathWork").querySelectorAll(".math-line")];
  let line=activeLine&&E("mathWork").contains(activeLine)?activeLine:lines[lines.length-1];
  if(!line)return;
