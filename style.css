@@ -6,3 +6,8 @@
 .math-frac .md{border:2px solid #64748b!important;border-top:0!important;border-radius:0 0 8px 8px!important}
 .math-frac input::placeholder{font-size:11px;color:#94a3b8}
 .math-line{align-items:center!important;min-height:92px!important}
+
+.workActions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.workActions button{width:auto;font-size:14px;padding:7px 10px;margin:0}
+#undoWork{background:#dbeafe;color:#1e3a8a}
+#clearWork{background:#e2e8f0;color:#172033}

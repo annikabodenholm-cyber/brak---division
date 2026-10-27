@@ -33,11 +33,18 @@ function insert(type){
    const t=document.createElement("span");t.className="opToken";t.textContent=type;activeLine.appendChild(t);
  }
 }
-function resetWork(){E("mathWork").innerHTML="";addLine()}
+function resetWork(){E("mathWork").innerHTML="";addLine()}function undoWork(){
+ const lines=[...E("mathWork").querySelectorAll(".math-line")];
+ let line=activeLine&&E("mathWork").contains(activeLine)?activeLine:lines[lines.length-1];
+ if(!line)return;
+ const last=line.lastElementChild;
+ if(last){last.remove();line.focus?.();return}
+ if(lines.length>1){line.remove();activeLine=lines[lines.length-2]}
+}
 function start(l){level=l;pos=0;points=0;build();E("menu").classList.add("hidden");E("result").classList.add("hidden");E("game").classList.remove("hidden");show()}
 function show(){let q=qs[pos];E("progress").textContent=`Uppgift ${pos+1} av ${TOTAL}`;E("score").textContent=`Rätt: ${points}`;E("fill").style.width=`${pos/TOTAL*100}%`;E("story").innerHTML=q.story;E("question").innerHTML=q.showExpr?q.expr:"";E("feedback").textContent="";E("solution").innerHTML="";E("next").classList.add("hidden");E("answer").value="";E("answer").disabled=false;E("check").disabled=false;let work=level>=4;E("workArea").classList.toggle("hidden",!work);if(work)resetWork();
 E("instruction").textContent=level===1?"Dividera heltalet med stambråket. Skriv ditt svar.":level===2?"Läs texten och räkna ut svaret.":level===3?"Skriv det inverterade talet.":level===4?"Använd det inverterade talet när du räknar. Använd gärna kladdytan för dina mellanled.":"Läs textuppgiften och avgör vilken beräkning som behövs. Visa din uträkning i kladdytan. Skriv sedan ditt svar i svarsrutan.";setTimeout(()=>E("answer").focus(),0)}
 function check(){let r=parse(E("answer").value),q=qs[pos];if(!r){E("feedback").textContent="Skriv svaret som ett heltal, ett bråk eller i blandad form.";return}E("answer").disabled=true;E("check").disabled=true;if(key(r)===key(q.right)){points++;E("feedback").textContent="✅ Rätt!"}else{E("feedback").innerHTML=`❌ Rätt svar: ${V(q.right)}`;E("solution").innerHTML=q.solution}E("score").textContent=`Rätt: ${points}`;E("next").classList.remove("hidden")}
 function next(){if(++pos>=TOTAL){E("game").classList.add("hidden");E("result").classList.remove("hidden");E("final").textContent=`${points} av ${TOTAL} rätt`}else show()}function home(){E("game").classList.add("hidden");E("result").classList.add("hidden");E("menu").classList.remove("hidden")}
-document.querySelectorAll("[data-level]").forEach(b=>b.addEventListener("click",()=>start(+b.dataset.level)));document.querySelectorAll("[data-insert]").forEach(b=>b.addEventListener("click",()=>insert(b.dataset.insert)));E("newLine").addEventListener("click",addLine);E("clearWork").addEventListener("click",resetWork);E("check").addEventListener("click",check);E("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!E("check").disabled)check()});E("next").addEventListener("click",next);E("home").addEventListener("click",home);E("resultHome").addEventListener("click",home);E("again").addEventListener("click",()=>start(level));
+document.querySelectorAll("[data-level]").forEach(b=>b.addEventListener("click",()=>start(+b.dataset.level)));document.querySelectorAll("[data-insert]").forEach(b=>b.addEventListener("click",()=>insert(b.dataset.insert)));E("newLine").addEventListener("click",addLine);E("undoWork").addEventListener("click",undoWork);E("clearWork").addEventListener("click",resetWork);E("check").addEventListener("click",check);E("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!E("check").disabled)check()});E("next").addEventListener("click",next);E("home").addEventListener("click",home);E("resultHome").addEventListener("click",home);E("again").addEventListener("click",()=>start(level));
 })();
