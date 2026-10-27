@@ -12,7 +12,26 @@ function make(){let q={story:"",showExpr:true};if(level<=2){let w=pick([2,3,4,5,
 else if(level===3){let n=pick([2,3,4,5,6,7,8,9]),d=pick([2,3,4,5,6,7,8,9,10]);while(n===d)n=pick([2,3,4,5,6,7,8,9]);q.right=red(d,n);q.expr=`Vilket är det inverterade talet till ${F(n,d)}?`;q.solution=`Byt plats på täljare och nämnare: ${F(n,d)} → ${V(q.right)}.`}
 else{let A=Math.random()<.45?{n:pick([2,3,4,5,6]),d:1}:red(pick([1,2,3,4,5]),pick([4,5,6,8,9,10,12]));if(A.n>=A.d&&A.d!==1)A=red(1,A.d);let B=red(pick([1,2,3,4,5]),pick([3,4,5,6,8,10]));while(B.n>=B.d)B=red(1,pick([3,4,5,6,8,10]));q.right=red(A.n*B.d,A.d*B.n);q.expr=`${V(A)} ÷ ${V(B)}`;q.solution=`Invertera det andra bråket: ${V(B)} → ${F(B.d,B.n)}. ${V(A)} ÷ ${V(B)} = ${V(A)} × ${F(B.d,B.n)} = ${V(q.right)}.`;if(level===5){q.showExpr=false;q.story=pick([`Du har ${V(A)} liter saft. Varje flaska rymmer ${V(B)} liter. Hur många flaskor motsvarar mängden?`,`Ett band är ${V(A)} meter långt. Varje bit ska vara ${V(B)} meter. Hur många sådana bitar motsvarar bandets längd?`,`Du har ${V(A)} kilogram deg. Till varje portion går ${V(B)} kilogram. Hur många portioner motsvarar mängden?`])}}return q}
 function build(){qs=[];for(let i=0;i<TOTAL;i++)qs.push(make())}
-function addLine(){let line=document.createElement("div");line.className="math-line";line.addEventListener("click",()=>activeLine=line);E("mathWork").appendChild(line);activeLine=line;return line}
+function addLine(){
+ let line=document.createElement("div");
+ line.className="math-line";
+ line.contentEditable="true";
+ line.spellcheck=false;
+ line.setAttribute("aria-label","Skriv din uträkning här");
+ line.setAttribute("data-placeholder","Klicka här och skriv din uträkning");
+ line.addEventListener("focus",()=>activeLine=line);
+ line.addEventListener("click",()=>activeLine=line);
+ line.addEventListener("keydown",e=>{
+   if(e.key==="Enter"){
+     e.preventDefault();
+     let nl=addLine();
+     nl.focus();
+   }
+ });
+ E("mathWork").appendChild(line);
+ activeLine=line;
+ return line
+}
 function insert(type){
  if(!activeLine) addLine();
  if(type==="frac"){
@@ -25,7 +44,7 @@ function insert(type){
    num.placeholder="täljare"; den.placeholder="nämnare";
    num.setAttribute("aria-label","Täljare");
    den.setAttribute("aria-label","Nämnare");
-   f.appendChild(num); f.appendChild(den); activeLine.appendChild(f);
+   f.contentEditable="false"; f.appendChild(num); f.appendChild(den); activeLine.appendChild(f);
    num.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="ArrowDown"){e.preventDefault();den.focus();}});
    den.addEventListener("keydown",e=>{if(e.key==="ArrowUp"){e.preventDefault();num.focus();}});
    num.focus();
@@ -38,8 +57,9 @@ function resetWork(){E("mathWork").innerHTML="";addLine()}function undoWork(){
  let line=activeLine&&E("mathWork").contains(activeLine)?activeLine:lines[lines.length-1];
  if(!line)return;
  const last=line.lastElementChild;
- if(last){last.remove();line.focus?.();return}
- if(lines.length>1){line.remove();activeLine=lines[lines.length-2]}
+ if(last && (last.classList.contains("math-frac")||last.classList.contains("opToken"))){last.remove();line.focus();return}
+ if(line.textContent.length>0){line.textContent=line.textContent.slice(0,-1);line.focus();return}
+ if(lines.length>1){line.remove();activeLine=lines[lines.length-2];activeLine.focus()}
 }
 function start(l){level=l;pos=0;points=0;build();E("menu").classList.add("hidden");E("result").classList.add("hidden");E("game").classList.remove("hidden");show()}
 function show(){let q=qs[pos];E("progress").textContent=`Uppgift ${pos+1} av ${TOTAL}`;E("score").textContent=`Rätt: ${points}`;E("fill").style.width=`${pos/TOTAL*100}%`;E("story").innerHTML=q.story;E("question").innerHTML=q.showExpr?q.expr:"";E("feedback").textContent="";E("solution").innerHTML="";E("next").classList.add("hidden");E("answer").value="";E("answer").disabled=false;E("check").disabled=false;let work=level>=4;E("workArea").classList.toggle("hidden",!work);if(work)resetWork();

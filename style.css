@@ -11,3 +11,20 @@
 .workActions button{width:auto;font-size:14px;padding:7px 10px;margin:0}
 #undoWork{background:#dbeafe;color:#1e3a8a}
 #clearWork{background:#e2e8f0;color:#172033}
+
+/* Kladdytan går nu att skriva direkt i */
+.math-line[contenteditable="true"]{
+ cursor:text;
+ outline:none;
+ padding:8px 6px;
+ border-radius:7px;
+ white-space:pre-wrap;
+ font-size:20px;
+}
+.math-line[contenteditable="true"]:focus{background:#f8fbff}
+.math-line:empty:before{
+ content:attr(data-placeholder);
+ color:#94a3b8;
+ font-size:15px;
+ pointer-events:none;
+}
