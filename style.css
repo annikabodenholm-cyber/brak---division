@@ -28,3 +28,43 @@
  font-size:15px;
  pointer-events:none;
 }
+
+/* Kompaktare bråkrutor i kladdytan så en hel divisionsuträkning ryms på en rad */
+#mathWork .math-frac{
+  display:inline-flex;
+  flex-direction:column;
+  vertical-align:middle;
+  width:42px;
+  min-width:42px;
+  margin:0 3px;
+}
+#mathWork .math-frac input{
+  width:42px;
+  min-width:0;
+  height:30px;
+  padding:2px 3px;
+  font-size:16px;
+  line-height:1;
+  text-align:center;
+  border-radius:5px;
+}
+#mathWork .math-frac input:first-child{
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
+}
+#mathWork .math-frac input:last-child{
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+}
+#mathWork .opToken{
+  display:inline-block;
+  margin:0 3px;
+  font-size:19px;
+  vertical-align:middle;
+}
+#mathWork .math-line{
+  flex-wrap:nowrap;
+  white-space:nowrap;
+  overflow-x:auto;
+  min-height:70px;
+}
