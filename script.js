@@ -22,9 +22,15 @@ if(level===5){
   let an=pick([2,3,4,5,6,7]);
   while(an>=ad || gcd(an,ad)!==1){ad=pick([4,5,6,7,8,9,10,12]);an=pick([2,3,4,5,6,7])}
   A={n:an,d:ad};
+  while(key(A)===key(B)){
+    bd=pick([4,5,6,7,8,9,10,12]);
+    bn=pick([2,3,4,5,6,7]);
+    while(bn>=bd || gcd(bn,bd)!==1){bd=pick([4,5,6,7,8,9,10,12]);bn=pick([2,3,4,5,6,7])}
+    B={n:bn,d:bd};
+  }
 }else{
   B=red(pick([1,2,3,4,5]),pick([3,4,5,6,8,10]));
-  while(B.n>=B.d)B=red(1,pick([3,4,5,6,8,10]));
+  while(B.n>=B.d || key(A)===key(B))B=red(pick([1,2,3,4,5]),pick([3,4,5,6,8,10]));
 }q.right=red(A.n*B.d,A.d*B.n);q.expr=`${V(A)} ÷ ${V(B)}`;q.solution=`Invertera det andra bråket: ${V(B)} → ${F(B.d,B.n)}. ${V(A)} ÷ ${V(B)} = ${V(A)} × ${F(B.d,B.n)} = ${V(q.right)}.`;if(level===5){q.showExpr=false;q.story=pick([
 `Du har ${V(A)} liter saft. Varje flaska rymmer ${V(B)} liter. Hur många flaskor motsvarar mängden?`,
 `Ett band är ${V(A)} meter långt. Varje bit ska vara ${V(B)} meter lång. Hur många sådana bitar motsvarar bandets längd?`,
