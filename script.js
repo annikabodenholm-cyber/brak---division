@@ -10,14 +10,13 @@ function make(){let q={story:"",showExpr:true};if(level<=2){let w=pick([2,3,4,5,
 `En sträcka är ${w} kilometer lång. Varje etapp är ${1}/${d} kilometer. Hur många etapper består sträckan av?`
 ])}}
 else if(level===3){let n=pick([2,3,4,5,6,7,8,9]),d=pick([2,3,4,5,6,7,8,9,10]);while(n===d)n=pick([2,3,4,5,6,7,8,9]);q.right=red(d,n);q.expr=`Vilket är det inverterade talet till ${F(n,d)}?`;q.solution=`Byt plats på täljare och nämnare: ${F(n,d)} → ${V(q.right)}.`}
-else{let A=Math.random()<.45?{n:pick([2,3,4,5,6]),d:1}:red(pick([1,2,3,4,5]),pick([4,5,6,8,9,10,12]));if(A.n>=A.d&&A.d!==1)A=red(1,A.d);let B;
+else{let A,B;
 if(level===5){
-  // Nivå 5: inga stambråk. Divisorn ska vara ett egentligt bråk med täljare > 1.
+  // Nivå 5: båda talen är egentliga icke-stambråk.
   let bd=pick([4,5,6,7,8,9,10,12]);
   let bn=pick([2,3,4,5,6,7]);
   while(bn>=bd || gcd(bn,bd)!==1){bd=pick([4,5,6,7,8,9,10,12]);bn=pick([2,3,4,5,6,7])}
   B={n:bn,d:bd};
-  // Även det första bråket ska vara ett egentligt icke-stambråk på nivå 5.
   let ad=pick([4,5,6,7,8,9,10,12]);
   let an=pick([2,3,4,5,6,7]);
   while(an>=ad || gcd(an,ad)!==1){ad=pick([4,5,6,7,8,9,10,12]);an=pick([2,3,4,5,6,7])}
@@ -29,8 +28,24 @@ if(level===5){
     B={n:bn,d:bd};
   }
 }else{
-  B=red(pick([1,2,3,4,5]),pick([3,4,5,6,8,10]));
-  while(B.n>=B.d || key(A)===key(B))B=red(pick([1,2,3,4,5]),pick([3,4,5,6,8,10]));
+  // Nivå 4: inga stambråk. Båda bråken har täljare större än 1.
+  let ad=pick([4,5,6,7,8,9,10,12]);
+  let an=pick([2,3,4,5,6,7]);
+  while(an>=ad || gcd(an,ad)!==1){ad=pick([4,5,6,7,8,9,10,12]);an=pick([2,3,4,5,6,7])}
+  A={n:an,d:ad};
+
+  let bd=pick([4,5,6,7,8,9,10,12]);
+  let bn=pick([2,3,4,5,6,7]);
+  while(bn>=bd || gcd(bn,bd)!==1){bd=pick([4,5,6,7,8,9,10,12]);bn=pick([2,3,4,5,6,7])}
+  B={n:bn,d:bd};
+
+  // Undvik att A och B är lika, eftersom kvoten då blir 1.
+  while(key(A)===key(B)){
+    bd=pick([4,5,6,7,8,9,10,12]);
+    bn=pick([2,3,4,5,6,7]);
+    while(bn>=bd || gcd(bn,bd)!==1){bd=pick([4,5,6,7,8,9,10,12]);bn=pick([2,3,4,5,6,7])}
+    B={n:bn,d:bd};
+  }
 }q.right=red(A.n*B.d,A.d*B.n);q.expr=`${V(A)} ÷ ${V(B)}`;q.solution=`Invertera det andra bråket: ${V(B)} → ${F(B.d,B.n)}. ${V(A)} ÷ ${V(B)} = ${V(A)} × ${F(B.d,B.n)} = ${V(q.right)}.`;if(level===5){q.showExpr=false;q.story=pick([
 `Du har ${V(A)} liter saft. Varje flaska rymmer ${V(B)} liter. Hur många flaskor motsvarar mängden?`,
 `Ett band är ${V(A)} meter långt. Varje bit ska vara ${V(B)} meter lång. Hur många sådana bitar motsvarar bandets längd?`,
